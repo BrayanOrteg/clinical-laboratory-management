@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class Stack <T> implements  IStack <T>{
 
+    public Stack() {
 
+    }
 
     private ArrayList <T> array= new ArrayList<>();
 
