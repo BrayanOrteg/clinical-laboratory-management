@@ -1,103 +1,55 @@
 package test;
 import junit.framework.TestCase;
+import model.*;
 import model.Stack;
-import model.HeapSorting;
-import model.Patient;
+
+import java.util.*;
 
 public class StackTest extends TestCase {
 
     private Stack<Patient> stack;
+    private Calendar date= Calendar.getInstance();
 
     public void setupStage1(){
-        stack= new Stack("setup1", 1);
-    }
+        stack= new Stack();
 
+    }
     public void setupStage2(){
-        reci= new Recipe("setup2",2);
-
-        reci.addIngredient("Cebolla", 315);
-        reci.addIngredient("Ajo", 58);
-        reci.addIngredient("Arroz", 520);
+        stack= new Stack();
+        date.set(1995, 5, 25);
+        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
+    }
+    public void setupStage3(){
+        stack= new Stack();
+        date.set(1995, 5, 25);
+        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
+        stack.push(new Patient("B",date,2, CauseOfAdmissionEnum.HEART_DISEASES, AgravationEnum.PREGNANT,2));
     }
 
-    public void testAddWeight1 (){
+    public void testEmpty_True(){
         setupStage1();
-
-        ingredient.tryAddWeight(54);
-        assertEquals(ingredient.getWeight(),299.0);
+        assertTrue(stack.empty());
     }
-
-    public  void testAddNegativeWeight (){
-
+    public void testPush_Empty_False (){
         setupStage1();
-
-        ingredient.tryAddWeight(-100);
-        assertEquals(ingredient.getWeight(),245.0);
-    
+        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
+        assertFalse(stack.empty());
     }
-
-    
-    public  void testRemoveWeight1 (){
-
-        setupStage1();
-
-        ingredient.TryRemoveWeight(45);
-        assertEquals(ingredient.getWeight(),200.0);
-    
-    }
-    
-    public  void testRemoveNegativeWeight (){
-
-        setupStage1();
-
-        ingredient.TryRemoveWeight(-100);
-        assertEquals(ingredient.getWeight(),245.0);
-    
-    }
-
-    public  void testAddIngredient (){
-
-        setupStage1();
-
-        reci.addIngredient("Sal", 12.0);
-        assertEquals(reci.getIngredients().size(),1);
-        assertEquals(reci.getIngredients().get(0).getName(),"Sal");
-        assertEquals(reci.getIngredients().get(0).getWeight(),12.0);
-
-    }
-
-    public  void testAddIngredient2 (){
-
+    public void testPop_Empty_True (){
         setupStage2();
-
-        reci.addIngredient("Pimienta", 6.0);
-        assertEquals(reci.getIngredients().size(),4);
-        assertEquals(reci.getIngredients().get(3).getName(),"Pimienta");
-        assertEquals(reci.getIngredients().get(3).getWeight(),6.0);
-
+        stack.pop();
+        assertTrue(stack.empty());
     }
-
-    public  void testAddIngredient3 (){
-
-        setupStage2();
-
-        reci.addIngredient("Ajo", 21.0);
-        assertEquals(reci.getIngredients().size(),3);
-        assertEquals(reci.getIngredients().get(1).getName(),"Ajo");
-        assertEquals(reci.getIngredients().get(1).getWeight(),79.0);
-
+    public void testPop_Empty_False (){
+        setupStage3();
+        stack.pop();
+        assertFalse(stack.empty());
     }
-
-    public  void testRemoveIngredientSetup2 (){
-
-        setupStage2();
-
-        reci.removeIngredient(1);
-        assertEquals(reci.getIngredients().size(),2);
-        assertEquals(reci.getIngredients().get(0).getName(),"Cebolla");
-        assertEquals(reci.getIngredients().get(1).getName(),"Arroz");
-        
-
+    public void testPeak_Push (){
+        setupStage3();
+        Patient patientTest= new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1);
+        stack.push(patientTest);
+        assertEquals(stack.peak(),patientTest);
     }
 
 

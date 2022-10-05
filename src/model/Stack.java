@@ -4,26 +4,17 @@ import java.util.ArrayList;
 
 public class Stack <T> implements  IStack <T>{
 
-    public Stack() {
-
-    }
-
+    public Stack(){}
     private ArrayList <T> array= new ArrayList<>();
 
-    public boolean empty(){
-
-        if(array.isEmpty()){
-            return true;
-        }
-        return false;
-    }
+    public boolean empty(){return array.isEmpty();}
 
     public T peak(){
-        return array.get(-1);
+        return array.get(array.size()-1);
     }
 
     public T pop(){
-        return array.remove(-1);
+        return array.remove(array.size()-1);
     }
 
     public void push(T newElement){
