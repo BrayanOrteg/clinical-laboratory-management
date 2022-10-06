@@ -1,14 +1,21 @@
 package model;
 
-public interface HeapSorting <T>{
+public interface HeapSorting <T extends Comparable<T>>{
 
-    public T[] BuildHeap(T[] array);
+    public void BuildHeap();
 
-    public T[] Heapify(int parent);
+    public void Heapify(int parent);
 
-    public boolean HeapInsert(T toAdd);
+    public int HeapHasSpace();
 
-    public T HeapExtractMax();
+    public boolean HeapInsert(Patient toAdd);
 
-    public T IncreaseKey(int index, int key);
+    public T HeapExtractMax() throws Exception;
+
+    public int SearchObject(int key, int id, int position) throws Exception;
+
+    public boolean IsEmpty();
+
+    public boolean IncreaseKey(int oldKey, int id, int newKey) throws Exception;
+
 }

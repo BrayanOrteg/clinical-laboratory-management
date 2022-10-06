@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public class Patient implements Comparable<Integer>{
+public class Patient implements Comparable<Patient>{
 
    private String name;
    private Calendar BDate;
@@ -37,8 +37,8 @@ public class Patient implements Comparable<Integer>{
    }
 
    @Override
-   public int compareTo(Integer o) {
-      return priority-o;
+   public int compareTo(Patient toCompare) {
+      return priority-toCompare.getPriority();
    }
 }
 

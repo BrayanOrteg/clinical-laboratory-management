@@ -1,117 +1,78 @@
 package test;
 import junit.framework.TestCase;
-import model.Recipe;
-import model.Ingredient;
+import model.AgravationEnum;
+import model.CauseOfAdmissionEnum;
+import model.Heap;
+import model.Patient;
+
+import java.util.Calendar;
 
 public class HeapTest extends TestCase {
 
-    private Recipe reci;
-    private Ingredient ingredient;
+    private Heap heapPatients;
+    private Calendar date= Calendar.getInstance();
 
     public void setupStage1(){
-        reci= new Recipe("setup1", 1);
-        ingredient= new Ingredient("Tomate", 245);
+        heapPatients=new Heap(2);
     }
 
     public void setupStage2(){
-        reci= new Recipe("setup2",2);
-
-        reci.addIngredient("Cebolla", 315);
-        reci.addIngredient("Ajo", 58);
-        reci.addIngredient("Arroz", 520);
+        heapPatients= new Heap(4);
+        date.set(1999, 5, 20);
+        Patient patient1= new Patient("Paolo", date, 2, CauseOfAdmissionEnum.GENERAL_MALAISE, AgravationEnum.NONE, 11000204);
+        date.set(2001, 3, 21);
+        Patient patient2= new Patient("Juana", date, 1, CauseOfAdmissionEnum.GUN, AgravationEnum.PREGNANT, 112453023);
+        heapPatients.HeapInsert(patient1);
     }
 
-    public void testAddWeight1 (){
+    public void testHeapSearchObject_InsertPatient (){
         setupStage1();
+        date.set(2002, 7, 23);
+        Patient patientTest= new Patient("Roberta", date, 2, CauseOfAdmissionEnum.GUN, AgravationEnum.PREGNANT, 112453023);
+        date.set(2004, 7, 23);
+        Patient patientTest2= new Patient("Constanza", date, 1, CauseOfAdmissionEnum.GUN, AgravationEnum.NONE, 202453025);
 
-        ingredient.tryAddWeight(54);
-        assertEquals(ingredient.getWeight(),299.0);
-    }
 
-    public  void testAddNegativeWeight (){
+        heapPatients.HeapInsert(patientTest);
+        heapPatients.HeapInsert(patientTest2);
 
-        setupStage1();
-
-        ingredient.tryAddWeight(-100);
-        assertEquals(ingredient.getWeight(),245.0);
-    
-    }
-
-    
-    public  void testRemoveWeight1 (){
-
-        setupStage1();
-
-        ingredient.TryRemoveWeight(45);
-        assertEquals(ingredient.getWeight(),200.0);
-    
-    }
-    
-    public  void testRemoveNegativeWeight (){
-
-        setupStage1();
-
-        ingredient.TryRemoveWeight(-100);
-        assertEquals(ingredient.getWeight(),245.0);
-    
-    }
-
-    public  void testAddIngredient (){
-
-        setupStage1();
-
-        reci.addIngredient("Sal", 12.0);
-        assertEquals(reci.getIngredients().size(),1);
-        assertEquals(reci.getIngredients().get(0).getName(),"Sal");
-        assertEquals(reci.getIngredients().get(0).getWeight(),12.0);
+        try {
+            assertEquals(heapPatients.SearchObject(2,112453023, 0),0);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
-    public  void testAddIngredient2 (){
+    public  void testHeapExtracMax (){
 
         setupStage2();
 
-        reci.addIngredient("Pimienta", 6.0);
-        assertEquals(reci.getIngredients().size(),4);
-        assertEquals(reci.getIngredients().get(3).getName(),"Pimienta");
-        assertEquals(reci.getIngredients().get(3).getWeight(),6.0);
-
+        try {
+            heapPatients.HeapExtractMax();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        assertEquals(heapPatients.getHeapSize(),3);
+    
     }
-
-    public  void testAddIngredient3 (){
-
-        setupStage2();
-
-        reci.addIngredient("Ajo", 21.0);
-        assertEquals(reci.getIngredients().size(),3);
-        assertEquals(reci.getIngredients().get(1).getName(),"Ajo");
-        assertEquals(reci.getIngredients().get(1).getWeight(),79.0);
-
-    }
-
-    public  void testRemoveIngredientSetup2 (){
-
-        setupStage2();
-
-        reci.removeIngredient(1);
-        assertEquals(reci.getIngredients().size(),2);
-        assertEquals(reci.getIngredients().get(0).getName(),"Cebolla");
-        assertEquals(reci.getIngredients().get(1).getName(),"Arroz");
-        
-
-    }
-
-
-
-
-
 
     
+    public  void testHeapIsEmpty (){
 
+        setupStage1();
 
+        assertTrue(heapPatients.IsEmpty());
+    
+    }
 
+    public  void testHeapIsNotEmpty (){
 
+        setupStage2();
 
+        assertFalse(heapPatients.IsEmpty());
+
+    }
 
     
 }
