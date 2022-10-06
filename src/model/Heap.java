@@ -16,6 +16,17 @@ public class Heap implements HeapSorting{
         this.heapSize = heapSize;
 
     }
+
+    public Heap(int heapSize, Patient[] array){
+
+        this.array = array;
+
+        this.heapSize = heapSize;
+
+        BuildHeap();
+
+    }
+
     @Override
     public void BuildHeap(){
 
@@ -47,7 +58,10 @@ public class Heap implements HeapSorting{
             swap = array[i];
             array[i] = array[largest];
             array[largest] = swap;
+            Heapify(largest);
         }
+
+
 
     }
 
@@ -66,14 +80,17 @@ public class Heap implements HeapSorting{
 
     //Revisar
     @Override
-    public boolean HeapInsert(Patient toAdd) {
+    public boolean HeapInsert(T toAdd) {
         int position = HeapHasSpace();
         if(position==-1)return false;
         else{
             array[position] = toAdd;
+            BuildHeap();
             return true;
         }
+
     }
+
 
     @Override
     public Patient HeapExtractMax() throws Exception{
@@ -87,11 +104,13 @@ public class Heap implements HeapSorting{
         return swap;
     }
 
-    @Override
+    //@Override
     public boolean IsEmpty() {
         if(array[0]==null) return true;
         else return false;
     }
+
+
 
     @Override
     public int SearchObject(int key, int id, int position) throws Exception{
@@ -111,6 +130,9 @@ public class Heap implements HeapSorting{
 
     }
 
+
+
+
     @Override
     public boolean IncreaseKey(int oldKey, int id, int newKey) throws Exception{
 
@@ -125,6 +147,8 @@ public class Heap implements HeapSorting{
         }
 
     }
+
+
 
     public int getHeapSize(){
         return heapSize;

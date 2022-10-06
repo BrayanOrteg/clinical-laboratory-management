@@ -13,8 +13,12 @@ public class HeapTest extends TestCase {
     private Calendar date= Calendar.getInstance();
 
     public void setupStage1(){
-        heapPatients=new Heap(2);
+        heapPatients=new Heap(10);
+
+
     }
+
+
 
     public void setupStage2(){
         heapPatients= new Heap(4);
@@ -73,6 +77,8 @@ public class HeapTest extends TestCase {
         assertFalse(heapPatients.IsEmpty());
 
     }
+
+
 
     
 }

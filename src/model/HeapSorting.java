@@ -8,7 +8,7 @@ public interface HeapSorting <T extends Comparable<T>>{
 
     public int HeapHasSpace();
 
-    public boolean HeapInsert(Patient toAdd);
+    public boolean HeapInsert(T toAdd);
 
     public T HeapExtractMax() throws Exception;
 

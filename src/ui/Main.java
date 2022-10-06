@@ -50,6 +50,10 @@ public class Main {
 
             case 1:
 
+                String [] patient= new String[6];
+
+                patient= sc.nextLine().split("")
+
 
                 break;
 
