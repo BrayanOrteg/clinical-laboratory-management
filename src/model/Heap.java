@@ -2,26 +2,22 @@ package model;
 
 import java.lang.*;
 
-public class Heap implements HeapSorting{
+import java.util.*;
+
+public class Heap implements HeapSorting {
 
 
-    private Patient[] array;
+    private ArrayList<PatientNode> array;
 
-    private int heapSize;
+    public Heap(){
 
-    public Heap(int heapSize){
-
-        array = new Patient [heapSize];
-
-        this.heapSize = heapSize;
+        array = new ArrayList<>();
 
     }
 
-    public Heap(int heapSize, Patient[] array){
+    public Heap(ArrayList<PatientNode> array){
 
         this.array = array;
-
-        this.heapSize = heapSize;
 
         BuildHeap();
 
@@ -30,34 +26,34 @@ public class Heap implements HeapSorting{
     @Override
     public void BuildHeap(){
 
-        for (int i = heapSize / 2 - 1; i >= 0; i--){
+        for (int i = array.size() / 2 - 1; i >= 0; i--){
             Heapify(i);
         }
 
     }
     @Override
-    public void Heapify(int i){
+    public void Heapify(int i) {
 
         int largest = i;
 
-        int l = largest*2+1;
+        int l = largest * 2 + 1;
 
-        int r = largest*2+2;
+        int r = largest * 2 + 2;
 
-        Patient swap;
+        PatientNode swap;
 
-        if (l < heapSize && array[l].compareTo(array[largest])>0)
+        if (l < array.size() && (array.get(l).getPriority()) > (array.get(largest).getPriority())) {
             largest = l;
-
+        }
         // If right child is larger than largest so far
-        if (r < heapSize && array[r].compareTo(array[largest])>0)
-            largest = r;
-
+        if (r < array.size() && (array.get(r).getPriority()) > (array.get(largest).getPriority())){
+        largest = r;
+        }
         // If largest is not root
         if (largest != i) {
-            swap = array[i];
-            array[i] = array[largest];
-            array[largest] = swap;
+            swap = array.get(i);
+            array.set(i, array.get(largest));
+            array.set(largest, swap);
             Heapify(largest);
         }
 
@@ -65,68 +61,61 @@ public class Heap implements HeapSorting{
 
     }
 
-    @Override
-    public int HeapHasSpace() {
-        int position = -1;
-
-        for(int i=0; i<heapSize; i++){
-            if(array[i]==null){
-                position = i;
-                return position;
-            }
-        }
-        return position;
-    }
-
     //Revisar
     @Override
-    public boolean HeapInsert(T toAdd) {
-        int position = HeapHasSpace();
-        if(position==-1)return false;
-        else{
-            array[position] = toAdd;
-            BuildHeap();
-            return true;
-        }
+    public boolean HeapInsert(PatientNode toAdd)throws Exception {
+        if(toAdd == null) throw new Exception("No se puede insertar un null");
+
+        if(toAdd.getKey()==0 || toAdd.getPatient()==null || toAdd.getPriority()==0)throw new Exception("No se puede insertar un nodo con id=0 o una prioridad=0");
+
+        array.add(toAdd);
+        BuildHeap();
+        return true;
 
     }
 
+    @Override
+    public PatientNode Maximun() throws Exception {
+        if(array.isEmpty()) throw new Exception("No hay pacientes en la fila");
+        else return array.get(0);
+    }
 
     @Override
-    public Patient HeapExtractMax() throws Exception{
-        if(array[0]==null) throw new Exception("No hay pacientes en la fila");
-        Patient swap;
-        swap = array[0];
-        array[0] = array[heapSize-1];
-        array[heapSize-1] = swap;
-        heapSize--;
+    public PatientNode HeapExtractMax() throws Exception{
+
+        if(array.isEmpty()) throw new Exception("No hay pacientes en la fila");
+        PatientNode swap;
+        swap = array.get(0);
+        array.set(0, array.get(array.size()-1));
+        array.set(array.size()-1, swap);
+        array.remove(array.size()-1);
         BuildHeap();
         return swap;
     }
 
     //@Override
     public boolean IsEmpty() {
-        if(array[0]==null) return true;
-        else return false;
+        return array.isEmpty();
     }
 
 
 
     @Override
-    public int SearchObject(int key, int id, int position) throws Exception{
-        if(array[position]==null) throw new Exception("El paciente no ha sido encontrado");
+    public int SearchObject(int priority, int id, int position) throws Exception{
 
-        if(array[position].getPriority()==key && array[position].getId()==id) return position;
+        if(array.isEmpty()) throw new Exception("El paciente no ha sido encontrado");
+
+        if(array.get(position)==null) throw new Exception("El paciente no ha sido encontrado");
 
         int l = position*2+1;
 
         int r = position*2+2;
 
-        if(l < heapSize && array[l].getPriority() >= key) return SearchObject(key, id, l);
+        if(l < array.size() && array.get(l).getPriority() >= priority) return SearchObject(priority, id, l);
 
-        if(r < heapSize && array[r].getPriority() >= key) return SearchObject(key, id, r);
+        if(r < array.size() && array.get(r).getPriority() >= priority) return SearchObject(priority, id, r);
 
-        return heapSize;
+        return position;
 
     }
 
@@ -134,23 +123,29 @@ public class Heap implements HeapSorting{
 
 
     @Override
-    public boolean IncreaseKey(int oldKey, int id, int newKey) throws Exception{
+    public boolean IncreaseKey(int oldPriority, int id, int newPriority) throws Exception{
 
         try {
-            int position = SearchObject(oldKey, id, 0);
-            if(position == heapSize) throw new Exception("El paciente no ha sido encontrado ");
-            array[position].setPriority(newKey);
-            return true;
+            SearchObject(oldPriority,id,0);
+
         }catch (Exception e){
             System.out.println(e.getMessage());
             return false;
         }
+
+        int position = SearchObject(oldPriority, id, 0);
+
+        if(position == array.size()) throw new Exception("El paciente no ha sido encontrado");
+
+        array.get(position).setPriority(newPriority);
+        BuildHeap();
+        return true;
 
     }
 
 
 
     public int getHeapSize(){
-        return heapSize;
+        return array.size();
     }
 }

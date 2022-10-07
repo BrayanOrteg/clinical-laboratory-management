@@ -2,9 +2,9 @@ package model;
 
 public interface IHashTable<T> {
 
-    public void chainedHashInsert(int k, PatientNode node);
+    public void chainedHashInsert(PatientNode node);
 
-    public void chainedHashSearch(int key);
+    public PatientNode chainedHashSearch(int key) throws Exception;
 
     public void chainedHashDelete(int key);
 

@@ -1,5 +1,0 @@
-package model;
-
-public enum CauseOfAdmissionEnum {
-    HEART_DISEASES, COLD_STEEL, GUN, INTOXICATION, GENERAL_MALAISE, UNKNOWN_DISEASE, VARIAL_INFECTION
-}

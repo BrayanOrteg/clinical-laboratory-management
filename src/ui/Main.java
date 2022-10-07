@@ -52,7 +52,7 @@ public class Main {
 
                 String [] patient= new String[6];
 
-                patient= sc.nextLine().split("")
+                patient= sc.nextLine().split("");
 
 
                 break;

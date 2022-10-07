@@ -7,7 +7,7 @@ import java.util.*;
 
 public class StackTest extends TestCase {
 
-    private Stack<Patient> stack;
+    private Stack <Patient> stack;
     private Calendar date= Calendar.getInstance();
 
     public void setupStage1(){
@@ -17,51 +17,138 @@ public class StackTest extends TestCase {
     public void setupStage2(){
         stack= new Stack();
         date.set(1995, 5, 25);
-        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
+
+        try {
+            stack.push(new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.CHILD,1));
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
     }
     public void setupStage3(){
         stack= new Stack();
         date.set(1995, 5, 25);
-        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
-        stack.push(new Patient("B",date,2, CauseOfAdmissionEnum.HEART_DISEASES, AgravationEnum.PREGNANT,2));
+
+        try {
+            stack.push(new Patient("A",date,"HOLA",1, StateEnum.GRAVE, AggravationEnum.CHILD,1));
+            stack.push(new Patient("B",date,"HOLA",2, StateEnum.INTERMEDIATE, AggravationEnum.NONE,2));
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
     }
 
     public void testEmpty_True(){
         setupStage1();
         assertTrue(stack.empty());
     }
+
+    //Test of push
     public void testPush_Empty_False (){
         setupStage1();
-        stack.push(new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1));
+        try {
+            stack.push(new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.OLD_AGE,1));
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         assertFalse(stack.empty());
     }
+
+    public void  testPush_ChangeSize(){
+        setupStage2();
+
+        try{
+            stack.push(new Patient("A",date,"HOLA",1, StateEnum.GRAVE, AggravationEnum.NONE,1));
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+        assertEquals(stack.getSize(), 2);
+    }
+
+    public void testPushError(){
+        setupStage1();
+        try{
+            stack.push(new Patient("A",date,"HOLA",-1, StateEnum.INTERMEDIATE, AggravationEnum.PREGNANT,1));
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+        assertTrue(stack.empty());
+    }
+
+    //Test Pop
     public void testPop_Empty_True (){
         setupStage2();
-        stack.pop();
+        try {
+            stack.pop();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         assertTrue(stack.empty());
     }
     public void testPop_Empty_False (){
         setupStage3();
-        stack.pop();
+        try {
+            stack.pop();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
         assertFalse(stack.empty());
     }
-    public void testPeak_Push (){
-        setupStage3();
-        Patient patientTest= new Patient("A",date,1, CauseOfAdmissionEnum.GUN, AgravationEnum.CHILDS,1);
-        stack.push(patientTest);
-        assertEquals(stack.peak(),patientTest);
+    public void testPopError(){
+        setupStage1();
+
+        try {
+            stack.pop();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+
+        }
+        assertTrue(stack.empty());
+
     }
 
+    //Test peak
+    public void testPeak_Push (){
+        setupStage3();
+        Patient patientTest= new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.NONE,1);
+        try{
+            stack.push(patientTest);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
 
+        }
+        try {
+            assertEquals(stack.peak(),patientTest);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
+    }
 
+    public void testPeak_Null(){
+        setupStage1();
 
+        try {
+            assertEquals(stack.peak(),-1);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
 
-    
+        }
 
-
-
-
+    }
 
 
     
