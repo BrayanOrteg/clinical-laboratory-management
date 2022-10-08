@@ -49,6 +49,12 @@ public class Main {
                 break;
 
             case 1:
+
+                String [] patient= new String[6];
+
+                patient= sc.nextLine().split("");
+
+
                 break;
 
             case 2:

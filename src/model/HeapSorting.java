@@ -1,14 +1,21 @@
 package model;
 
-public interface HeapSorting <T>{
+public interface HeapSorting {
 
-    public T[] BuildHeap(T[] array);
+    public void BuildHeap();
 
-    public T[] Heapify(int parent);
+    public void Heapify(int parent);
 
-    public boolean HeapInsert(T toAdd);
+    public boolean HeapInsert(PatientNode toAdd) throws Exception;
 
-    public T HeapExtractMax();
+    public PatientNode HeapExtractMax() throws Exception;
 
-    public T IncreaseKey(int index, int key);
+    public PatientNode Maximun() throws Exception; //Falta Test
+
+    public int SearchObject(int priority, int id, int position) throws Exception;
+
+    public boolean IsEmpty();
+
+    public boolean IncreaseKey(int oldPriority, int id, int newPriority) throws Exception; //Falta Test
+
 }
