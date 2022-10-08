@@ -1,5 +1,6 @@
 package model;
 
+/*
 public class Heap <T> implements HeapSorting{
 
     private T[] array;
@@ -15,3 +16,5 @@ public class Heap <T> implements HeapSorting{
     }
 
 }
+*/
+
