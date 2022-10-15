@@ -2,7 +2,7 @@ package model;
 
 public class HashTable<T> implements IHashTable<PatientNode<T>> {
 
-    private int size = 1001;
+    private final int size = 1001;
     private PatientNode [] array=new PatientNode [size];
 
     public HashTable() {
@@ -17,11 +17,9 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
         }
         else{
             boolean ver=false;
-            PatientNode pointer;
+            PatientNode pointer=array[code];
 
             while(ver==false){
-
-                pointer=array[code];
 
                 if(pointer.getNextPatient()==null){
                     pointer.setNextPatient(node);
