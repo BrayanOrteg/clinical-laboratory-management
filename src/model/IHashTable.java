@@ -6,7 +6,7 @@ public interface IHashTable<T> {
 
     public PatientNode chainedHashSearch(int key) throws Exception;
 
-    public void chainedHashDelete(int key);
+    public PatientNode chainedHashDelete(int key);
 
     public int hashFunction(int key);
 

@@ -1,6 +1,6 @@
 package model;
 
-public class HashTable<T> implements IHashTable<T> {
+public class HashTable<T> implements IHashTable<PatientNode<T>> {
 
     private int size = 1001;
     private PatientNode [] array=new PatientNode [size];
@@ -40,9 +40,11 @@ public class HashTable<T> implements IHashTable<T> {
         int code = hashFunction(key);
         boolean var = false;
         PatientNode pointer=array[code];
+
         if(pointer==null){
             throw new Exception("No se encontró el elemento");
         }
+
         while (var == false) {
             if (pointer.getKey() == key) {
                 var=true;
@@ -55,32 +57,37 @@ public class HashTable<T> implements IHashTable<T> {
                 }
             }
         }
-        return array[code];
+        return pointer;
     }
 
-    public void chainedHashDelete(int key){
-        /*
+    public PatientNode chainedHashDelete(int key) {
 
-        if(chainedHashSearch(key).getPreviousPatient()==null && chainedHashSearch(key).getNextPatient()==null){
-            array[hashFunction(key)]=null;
+        boolean var = false;
+        PatientNode pointer=null;
 
+        try {
+            pointer = chainedHashSearch(key);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
+        if(pointer!=null) {
 
+            int code= hashFunction(pointer.getKey());
 
-        if(chainedHashSearch(key).getPreviousPatient()!=null){
-            chainedHashSearch(key).getPreviousPatient().setNextPatient(null);
-        }
-        else{
-            if(chainedHashSearch(key).getNextPatient()!=null){
-                array[hashFunction(key)]=chainedHashSearch(key).getNextPatient();
+            if (pointer.getPreviousPatient() == null && pointer.getNextPatient() == null){
+                array[code]=null;
+            }else if (pointer.getPreviousPatient() == null && pointer.getNextPatient() != null){
+                array[code]=pointer.getNextPatient();
+                pointer.getNextPatient().setPreviousPatient(null);
+            }else if (pointer.getPreviousPatient() != null && pointer.getNextPatient() == null){
+                pointer.getPreviousPatient().setNextPatient(null);
+            }else if (pointer.getPreviousPatient() != null && pointer.getNextPatient() != null){
+                pointer.getPreviousPatient().setNextPatient(pointer.getNextPatient());
+                pointer.getNextPatient().setPreviousPatient(pointer.getPreviousPatient());
             }
-            else{
-                array[hashFunction(key)]=null;
-            }
         }
-
-         */
+        return pointer;
     }
 
     public int hashFunction(int key){
