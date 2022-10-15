@@ -34,7 +34,7 @@ public class Controller {
         System.out.print(json);
 
         try {
-            FileOutputStream fos = new FileOutputStream(new File("patients.txt"));
+            FileOutputStream fos = new FileOutputStream(new File("dataBase\\patients.txt"));
             fos.write( json.getBytes(StandardCharsets.UTF_8) );
             fos.close();
 
@@ -47,8 +47,8 @@ public class Controller {
 
     public void ReadJson() {
         try {
-            File file = new File("patients.txt");
-            System.out.println("Existe: "+file.exists());
+            File file = new File("dataBase\\patients.txt");
+            System.out.println("\n\nExiste: "+file.exists() + file.getAbsolutePath());
             FileInputStream fis = new FileInputStream(file);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
