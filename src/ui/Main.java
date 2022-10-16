@@ -20,13 +20,15 @@ public class Main {
     public static void main(String [] args) {
 
         Main principal= new Main();
+
         task = new TimerTask() {
             @Override
             public void run() {
                 String out = principal.timedOut();
-                if(out.equals("")) {
+                if(!out.equals("")) {
                     System.out.println("La fila ha avanzado, el paciente con " + out + " ha sido atendido" +
                             "\nNo olvide hacer el checkout manualmente");
+
                 }
             }
         };
@@ -38,7 +40,7 @@ public class Main {
             option= principal.showMenu();
             principal.executeOperation(option);
 
-            if(firstTime||option==2){
+            if(firstTime){
                 timer.schedule(task, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000));
                 firstTime=false;
             }
@@ -57,6 +59,7 @@ public class Main {
 
         System.out.println(
                 """
+                        
                         Select an option
                         (1) Patient check in
                         (2) Patient check out
@@ -80,24 +83,16 @@ public class Main {
                 break;
 
             case 1:
-
                 patientCheckIn();
-
                 break;
                 
             case 2:
-
+                patientCheckOut();
                 break;
 
             case 3:
-
-
+                undoConfirmation();
                 break;
-
-            case 4:
-
-                break;
-
 
             default:
                 System.out.println("Invalid option");
@@ -118,11 +113,12 @@ public class Main {
         name= sc.nextLine();
 
         System.out.println("\nType patient's id");
-        id= sc.nextInt();
+        id= Integer.parseInt(sc.nextLine());
 
         System.out.println("\nType patient's date of birth in format (year/month/day)\nExample (1990/11/10)");
+        birth=sc.nextLine();
 
-        arrayDate= Arrays.stream(sc.nextLine().split("/")).mapToInt(Integer::parseInt).toArray();
+        arrayDate= Arrays.stream(birth.split("/")).mapToInt(Integer::parseInt).toArray();
         date.set(arrayDate[0],arrayDate[1],arrayDate[2]);
 
         System.out.println("\nType the admission Reason");
@@ -170,8 +166,7 @@ public class Main {
                             (2) No
                         """);
         if(sc.nextInt()==1){
-            control.undoAction();
-            System.out.println();
+            System.out.println(control.undoAction());
         }
     }
 

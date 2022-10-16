@@ -8,22 +8,37 @@ import java.util.*;
 
 public class Controller {
 
-    Heap priorityPatients;
+    Heap priorityPatients = new Heap();
     ArrayList <PatientNode> patientsOfHospital = new ArrayList<>();
-    Stack <PatientNode> undoStack;
+    Stack <PatientStackNode> undoStack= new Stack<>();
+    HashTable <PatientNode> hash = new HashTable<>();
 
-    HashTable <PatientNode> hash;
+    public Controller(){
+        ArrayList<Patient> patients = ReadJson();
 
-    public Controller() {
+        if(patients!=null){
+            for(Patient p:patients){
+                try{
+                    priorityPatients.HeapInsert(new PatientNode<Patient>(p.getPriority(), p, p.getId()));
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
     }
 
     //TimedOut
 
     public String timedOut() {
-        try {
-            PatientNode pn = priorityPatients.HeapExtractMax();
-            return "nombre: " + ((Patient) pn.getPatient()).getName() + " id: " + ((Patient) pn.getPatient()).getId();
-        } catch (Exception e) {}
+
+        if(priorityPatients.IsEmpty() != true){
+            try {
+                PatientNode pn = priorityPatients.HeapExtractMax();
+                InsertPatientsToCheckOut(pn);
+                return "Name: " + ((Patient) pn.getPatient()).getName() + " id: " + ((Patient) pn.getPatient()).getId();
+            } catch (Exception e) {}
+        }
+
         return"";
     }
 
@@ -49,7 +64,7 @@ public class Controller {
         }
     }
 
-    public void ReadJson() {
+    public ArrayList<Patient> ReadJson() {
         try {
             File file = new File("dataBase\\patients.txt");
             System.out.println("\n\nExiste: "+file.exists() + file.getAbsolutePath());
@@ -74,21 +89,26 @@ public class Controller {
                 System.out.println(p.getPriority() + " " + p.getCauseOfAdmission());
             }
 
+            return people;
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     //Patient methods
 
     public String checkOutPatient(int key){
 
-        String out="Error";
+        String out="";
+        PatientNode pn= hash.chainedHashDelete(key);
 
-        if(hash.chainedHashDelete(key)!=null){
+        if(pn !=null){
             out= "Check out was successful";
+            addToStack(new PatientStackNode(pn, 2));
         }
         return out ;
     }
@@ -122,9 +142,9 @@ public class Controller {
         PatientNode <Patient> patientNode= new PatientNode<>(priority, patient, id);
 
 
-
         try {
             priorityPatients.HeapInsert(patientNode);
+            addToStack(new PatientStackNode(patientNode, 1));
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -132,16 +152,38 @@ public class Controller {
 
     public String undoAction(){
         String out="There is not an action to undo";
-        PatientNode patient;
+        PatientStackNode patient;
 
-        if(!undoStack.empty()){
+        if(undoStack.empty() == false){
             try {
                 patient = undoStack.pop();
+
+                if(patient.getAction()==1){
+
+                    priorityPatients.DeleteExact(patient.getPatient().getPriority(),patient.getPatient().getKey(), 0);
+                    out=patient.getPatient().getNamePatient() + "'s Check in was undone";
+                } else if (patient.getAction()==2){
+
+                    hash.chainedHashInsert(patient.getPatient());
+                    out= patient.getPatient().getNamePatient() + "'s check out was undone";
+                }
+
+
             }catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("This check in cannot be undone");
             }
         }
         return out;
+    }
+
+    public void InsertPatientsToCheckOut(PatientNode patient){
+        hash.chainedHashInsert(patient);
+    }
+
+    public void addToStack(PatientStackNode patient){
+        try {
+            undoStack.push(patient);
+        }catch (Exception e){ }
     }
 
 }

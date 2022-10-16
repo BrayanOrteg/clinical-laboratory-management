@@ -41,4 +41,8 @@ public class PatientNode <T>{
     public int getKey() { return key; }
 
     public void setKey(int key) { this.key = key; }
+
+    public String getNamePatient(){
+       return ((Patient)patient).getName();
+    }
 }

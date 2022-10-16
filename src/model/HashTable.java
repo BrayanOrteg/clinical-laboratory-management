@@ -40,7 +40,7 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
         PatientNode pointer=array[code];
 
         if(pointer==null){
-            throw new Exception("No se encontró el elemento");
+            throw new Exception("The patient is not registered or has not been attended");
         }
 
         while (var == false) {

@@ -61,6 +61,7 @@ public class Heap implements HeapSorting {
 
     }
 
+
     //Revisar
     @Override
     public boolean HeapInsert(PatientNode toAdd)throws Exception {
@@ -117,6 +118,15 @@ public class Heap implements HeapSorting {
 
         return position;
 
+    }
+
+    public void DeleteExact(int priority, int id, int position){
+        try{
+            int i = SearchObject(priority, id, position);
+            array.remove(i);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
 
