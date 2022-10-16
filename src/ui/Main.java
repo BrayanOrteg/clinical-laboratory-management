@@ -4,25 +4,51 @@ import java.util.*;
 
 import model.Controller;
 
-
 public class Main {
 
     public Scanner sc= new Scanner(System.in);
-    public Controller control= new Controller();
+
+    public Controller control = new Controller();
+
+    public static Timer timer = new Timer();
+
+    public static TimerTask task;
+
     public Main(){
     }
 
     public static void main(String [] args) {
 
-        Main main= new Main();
+        Main principal= new Main();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                String out = principal.timedOut();
+                if(out.equals("")) {
+                    System.out.println("La fila ha avanzado, el paciente con " + out + " ha sido atendido" +
+                            "\nNo olvide hacer el checkout manualmente");
+                }
+            }
+        };
 
+        boolean firstTime = true;
         int option=0;
 
         do{
-            option= main.showMenu();
-            main.executeOperation(option);
+            option= principal.showMenu();
+            principal.executeOperation(option);
+
+            if(firstTime||option==2){
+                timer.schedule(task, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000));
+                firstTime=false;
+            }
 
         }while (option!=0);
+        timer.cancel();
+    }
+
+    public String timedOut(){
+        return control.timedOut();
     }
 
 

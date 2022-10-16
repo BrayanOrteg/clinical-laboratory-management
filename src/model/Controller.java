@@ -4,8 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.*;
 
 public class Controller {
 
@@ -18,6 +17,15 @@ public class Controller {
     public Controller() {
     }
 
+    //TimedOut
+
+    public String timedOut() {
+        try {
+            PatientNode pn = priorityPatients.HeapExtractMax();
+            return "nombre: " + ((Patient) pn.getPatient()).getName() + " id: " + ((Patient) pn.getPatient()).getId();
+        } catch (Exception e) {}
+        return"";
+    }
 
     //Json methods
 
@@ -137,3 +145,5 @@ public class Controller {
     }
 
 }
+
+

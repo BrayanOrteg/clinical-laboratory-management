@@ -25,6 +25,10 @@ public class Patient implements Comparable<Patient>{
       this.id = id;
    }
 
+   public String getName() {
+      return name;
+   }
+
    public Integer getPriority() {
       return priority;
    }
