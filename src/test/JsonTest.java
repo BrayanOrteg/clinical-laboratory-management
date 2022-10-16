@@ -18,19 +18,19 @@ public class JsonTest extends TestCase {
         //Creamos dos objetos de tipo Patient Node y los insertamos
 
         date.set(1999, 5, 20);
-        Patient patient1= new Patient("A", date,"Fiebre",2, StateEnum.INTERMEDIATE, AggravationEnum.OLD_AGE, 11000204);
+        Patient patient1= new Patient("A", date,"Fiebre",2, StateEnum.INTERMEDIATE, AggravationEnum.OLD_AGE, StatusPatientEnum.TO_CHECKOUT,11000204);
 
 
         date.set(2001, 3, 21);
-        Patient patient2= new Patient("B", date, "Fractura",1, StateEnum.MILD, AggravationEnum.PREGNANT, 112453023);
+        Patient patient2= new Patient("B", date, "Fractura",1, StateEnum.MILD, AggravationEnum.PREGNANT, StatusPatientEnum.TO_CHECKOUT,112453023);
 
 
         date.set(2004, 7, 31);
-        Patient patient3 = new Patient("C",date,"Disparo",1, StateEnum.GRAVE, AggravationEnum.CHILD,1);
+        Patient patient3 = new Patient("C",date,"Disparo",1, StateEnum.GRAVE, AggravationEnum.CHILD,StatusPatientEnum.TO_CHECKOUT,1);
 
 
         date.set(2009, 11, 21);
-        Patient patient4 = new Patient("C",date,"Enanismo",2, StateEnum.INTERMEDIATE, AggravationEnum.NONE,2);
+        Patient patient4 = new Patient("C",date,"Enanismo",2, StateEnum.INTERMEDIATE, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,2);
 
         save.add(patient1);
         save.add(patient2);

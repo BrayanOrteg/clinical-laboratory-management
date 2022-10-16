@@ -7,18 +7,21 @@ public class Patient implements Comparable<Patient>{
    private String name;
    private Calendar BDate;
    private Integer priority;
-   private StateEnum admissionCause;
+   private StateEnum state;
    private AggravationEnum aggravation;
    private  Integer id;
    private  String causeOfAdmission;
 
-   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, StateEnum admissionCause, AggravationEnum aggravation, Integer id) {
+   private  StatusPatientEnum statusPatient;
+
+   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, StateEnum state, AggravationEnum aggravation, StatusPatientEnum statusPatient, Integer id) {
       this.name = name;
       this.BDate = BDate;
       this.priority = priority;
-      this.admissionCause = admissionCause;
+      this.state = state;
       this.aggravation = aggravation;
       this.causeOfAdmission=causeOfAdmission;
+      this.statusPatient=statusPatient;
       this.id = id;
    }
 
@@ -46,6 +49,12 @@ public class Patient implements Comparable<Patient>{
    public String getCauseOfAdmission() { return causeOfAdmission; }
 
    public void setCauseOfAdmission(String causeOfAdmission) { this.causeOfAdmission = causeOfAdmission; }
+
+   public StatusPatientEnum getStatusPatient() { return statusPatient; }
+
+   public void setStatusPatient(StatusPatientEnum statusPatient) { this.statusPatient = statusPatient; }
+
+
 }
 
 
