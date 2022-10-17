@@ -11,13 +11,13 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
 
     public void chainedHashInsert(PatientNode node) {
 
-        int code = hashFunction(node.getKey());
-        if(array[code]==null){
-            array[code]=node;
+        long code = hashFunction(node.getKey());
+        if(array[Math.toIntExact(code)]==null){
+            array[Math.toIntExact(code)]=node;
         }
         else{
             boolean ver=false;
-            PatientNode pointer=array[code];
+            PatientNode pointer=array[Math.toIntExact(code)];
 
             while(ver==false){
 
@@ -33,11 +33,11 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
     }
 
 
-    public PatientNode chainedHashSearch(int key) {
+    public PatientNode chainedHashSearch(long key) {
 
-        int code = hashFunction(key);
+        long code = hashFunction(key);
         boolean var = false;
-        PatientNode pointer=array[code];
+        PatientNode pointer=array[Math.toIntExact(code)];
 
         if(pointer==null){
             return null;
@@ -58,7 +58,7 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
         return pointer;
     }
 
-    public PatientNode chainedHashDelete(int key) {
+    public PatientNode chainedHashDelete(long key) {
 
         boolean var = false;
         PatientNode pointer=null;
@@ -67,12 +67,12 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
 
         if(pointer!=null) {
 
-            int code= hashFunction(pointer.getKey());
+            long code= hashFunction(pointer.getKey());
 
             if (pointer.getPreviousPatient() == null && pointer.getNextPatient() == null){
-                array[code]=null;
+                array[Math.toIntExact(code)]=null;
             }else if (pointer.getPreviousPatient() == null && pointer.getNextPatient() != null){
-                array[code]=pointer.getNextPatient();
+                array[Math.toIntExact(code)]=pointer.getNextPatient();
                 pointer.getNextPatient().setPreviousPatient(null);
             }else if (pointer.getPreviousPatient() != null && pointer.getNextPatient() == null){
                 pointer.getPreviousPatient().setNextPatient(null);
@@ -84,7 +84,7 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
         return pointer;
     }
 
-    public int hashFunction(int key){
+    public long hashFunction( long key){
         return key % size;
     }
 }

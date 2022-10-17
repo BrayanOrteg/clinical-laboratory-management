@@ -1,12 +1,13 @@
 package model;
 
 public class PatientNode <T>{
-    private int priority, key, unit;
+    private int priority, unit;
+    private long key;
     private T patient;
     private PatientNode nextPatient;
     private PatientNode previousPatient;
 
-    public PatientNode(int priority, T patient, int key) {
+    public PatientNode(int priority, T patient, long key) {
         this.priority = priority;
         this.patient = patient;
         this.key=key;
@@ -39,9 +40,9 @@ public class PatientNode <T>{
 
     public void setPatient(T patient) { this.patient = patient; }
 
-    public int getKey() { return key; }
+    public long getKey() { return key; }
 
-    public void setKey(int key) { this.key = key; }
+    public void setKey(long key) { this.key = key; }
 
 
     public String getNamePatient(){

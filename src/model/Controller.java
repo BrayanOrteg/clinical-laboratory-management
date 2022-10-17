@@ -34,15 +34,59 @@ public class Controller {
         }
     }
 
+
+    //Priority Increase GENERAL - HEMATOLOGY
+
+    public void IncreseGeneral(){
+        for(int i=0; i<priorityGeneral.getHeapSize(); i++){
+            PatientNode<Patient> p = priorityGeneral.getByIndex(i);
+
+            try{
+                priorityGeneral.IncreaseKey(p.getPriority(), p.getPatient().getId(), p.getPriority()+1);
+            }catch (Exception e){}
+        }
+    }
+
+    public void IncreseHematology(){
+        for(int i=0; i<priorityHematology.getHeapSize(); i++){
+            PatientNode<Patient> p = priorityHematology.getByIndex(i);
+
+            try{
+                priorityHematology.IncreaseKey(p.getPriority(), p.getPatient().getId(), p.getPriority()+1);
+            }catch (Exception e){}
+        }
+    }
+
+    public void DecreaseGeneral(){
+        for(int i=0; i<priorityGeneral.getHeapSize(); i++){
+            PatientNode<Patient> p = priorityGeneral.getByIndex(i);
+
+            try{
+                priorityGeneral.IncreaseKey(p.getPriority(), p.getPatient().getId(), p.getPriority()-1);
+            }catch (Exception e){}
+        }
+    }
+
+    public void DecreaseHematology(){
+        for(int i=0; i<priorityHematology.getHeapSize(); i++){
+            PatientNode<Patient> p = priorityHematology.getByIndex(i);
+
+            try{
+                priorityHematology.IncreaseKey(p.getPriority(), p.getPatient().getId(), p.getPriority()-1);
+            }catch (Exception e){}
+        }
+    }
+
+
     //TimedOut
 
     public String timedOutGeneral() {
 
         if(!priorityGeneral.IsEmpty()){
             try {
-                PatientNode pn1 = priorityGeneral.HeapExtractMax();
+                PatientNode pn1 = priorityGeneral.ExtractMax();
                 checkOut.add(pn1);
-                ((Patient)pn1.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
+                ((Patient)pn1.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT_MACHINE);
 
                 return "Name: " + ((Patient) pn1.getPatient()).getName() + " id: " + ((Patient) pn1.getPatient()).getId();
             } catch (Exception e) {}
@@ -54,9 +98,9 @@ public class Controller {
 
         if(!priorityHematology.IsEmpty()){
             try {
-                PatientNode pn2 = priorityHematology.HeapExtractMax();
+                PatientNode pn2 = priorityHematology.ExtractMax();
                 checkOut.add(pn2);
-                ((Patient)pn2.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
+                ((Patient)pn2.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT_MACHINE);
 
                 return "Name: " + ((Patient) pn2.getPatient()).getName() + " id: " + ((Patient) pn2.getPatient()).getId();
             } catch (Exception e) {}
@@ -70,9 +114,11 @@ public class Controller {
 
         Gson gson = new Gson();
 
-        String json = gson.toJson(allPatients);
+        for(Patient p:allPatients){
+            p.setStatusPatient(StatusPatientEnum.OUT_OF_HOSPITAL);
+        }
 
-        System.out.print(json);
+        String json = gson.toJson(allPatients);
 
         try {
             FileOutputStream fos = new FileOutputStream(new File("dataBase\\patients.txt"));
@@ -104,7 +150,7 @@ public class Controller {
             Patient[] patienstFromJson = gson.fromJson(json, Patient[].class);
             ArrayList<Patient> sent = new ArrayList<>();
 
-            sent.addAll(sent);
+            if(patienstFromJson!=null)sent.addAll(List.of(patienstFromJson));
 
             return sent;
 
@@ -118,12 +164,12 @@ public class Controller {
 
     //Patient methods
 
-    public String checkOutPatient(int key){
+    public String checkOutPatient(long key){
 
         String out="Patient is not available for check out";
         PatientNode pn= hash.chainedHashSearch(key);
 
-        if(pn !=null && ((Patient)pn.getPatient()).getStatusPatient().equals(StatusPatientEnum.TO_CHECKOUT)){
+        if(pn !=null && (((Patient)pn.getPatient()).getStatusPatient().equals(StatusPatientEnum.TO_CHECKOUT)||((Patient)pn.getPatient()).getStatusPatient().equals(StatusPatientEnum.TO_CHECKOUT_MACHINE))){
             ((Patient)pn.getPatient()).setStatusPatient(StatusPatientEnum.OUT_OF_HOSPITAL);
             out= "Check out was successful";
             checkOut.remove(pn);
@@ -136,7 +182,7 @@ public class Controller {
     //1 si el paciente no está registrado
     //2 si está registrado pero ya entró a la clinica
     //3 si está registrado y no ha entrado a la clinica
-    public int patientStatusCheck(int key){
+    public int patientStatusCheck(long key){
 
         if (hash.chainedHashSearch(key)==null){
             return 1;
@@ -146,15 +192,32 @@ public class Controller {
         return 3;
     }
 
-    public void checkInPrePatient(int id, int unit){
+    public void checkInPrePatient(long id, int unit,int aggravation){
 
         PatientNode patientNode= hash.chainedHashSearch(id);
 
+        int priority= 1;
+
+        StatusPatientEnum statusPatient = StatusPatientEnum.PRIORITY_GENERAL;
+
+        if(aggravation == 1 || aggravation==3){
+            priority+=1;
+        }
+        else if (aggravation == 2 ){
+            priority+=2;
+        }
+
+        patientNode.setPriority(priority);
+
         try {
             if(unit==1){
-                priorityHematology.HeapInsert(patientNode);
+
+                ((Patient)patientNode.getPatient()).setStatusPatient(StatusPatientEnum.PRIORITY_HEMATOLOGY);
+                priorityHematology.Insert(patientNode);
+
             }else{
-                priorityGeneral.HeapInsert(patientNode);
+                ((Patient)patientNode.getPatient()).setStatusPatient(StatusPatientEnum.PRIORITY_GENERAL);
+                priorityGeneral.Insert(patientNode);
             }
         }catch (Exception e){}
 
@@ -162,7 +225,7 @@ public class Controller {
     }
 
 
-    public void checkInPatient(String name, Calendar date, String causeOfAdmission, int aggravation, int id , int unit){
+    public void checkInPatient(String name, Calendar date, String causeOfAdmission, int aggravation, long id , int unit){
 
         AggravationEnum aggravationPatient = AggravationEnum.NONE;
 
@@ -203,9 +266,9 @@ public class Controller {
         try {
 
             if (unit==1){
-                priorityHematology.HeapInsert(patientNode);
+                priorityHematology.Insert(patientNode);
 
-            }else if(unit == 2){ priorityGeneral.HeapInsert(patientNode); }
+            }else if(unit == 2){ priorityGeneral.Insert(patientNode); }
 
 
             hash.chainedHashInsert(patientNode);
@@ -225,29 +288,47 @@ public class Controller {
 
         if(undoStack.empty() == false){
             try {
+                out="This check in cannot be undone";
                 patient = undoStack.pop();
+                StatusPatientEnum status=((Patient)patient.getPatient().getPatient()).getStatusPatient();
 
-                if(patient.getUnit()==1){
+                if(status.equals(StatusPatientEnum.PRIORITY_HEMATOLOGY)){
 
                     priorityHematology.DeleteExact(patient.getPatient().getPriority(),patient.getPatient().getKey(), 0);
                     ((Patient)patient.getPatient().getPatient()).setStatusPatient(StatusPatientEnum.OUT_OF_HOSPITAL);
                     out=patient.getPatient().getNamePatient() + "'s Check in was undone";
 
-                } else if (patient.getUnit()==2) {
+                } else if (status.equals(StatusPatientEnum.PRIORITY_GENERAL)) {
 
                     priorityGeneral.DeleteExact(patient.getPatient().getPriority(),patient.getPatient().getKey(), 0);
                     ((Patient)patient.getPatient().getPatient()).setStatusPatient(StatusPatientEnum.OUT_OF_HOSPITAL);
                     out=patient.getPatient().getNamePatient() + "'s Check in was undone";
 
-                }else{
+                }else if (status.equals(StatusPatientEnum.OUT_OF_HOSPITAL)){
                     checkOut.add(patient.getPatient());
                     ((Patient)patient.getPatient().getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
                     out= patient.getPatient().getNamePatient() + "'s check out was undone";
+                } else if (status.equals(StatusPatientEnum.TO_CHECKOUT)) {
+                    if(patient.getUnit()==1){
+                        DecreaseHematology();
+                        priorityHematology.Insert(patient.getPatient());
+                        ((Patient)patient.getPatient().getPatient()).setStatusPatient(StatusPatientEnum.PRIORITY_HEMATOLOGY);
+                        checkOut.remove(patient.getPatient());
+                        out= patient.getPatient().getNamePatient() + " has returned to the waiting room";
+                    }else if(patient.getUnit()==2){
+                        DecreaseGeneral();
+                        priorityGeneral.Insert(patient.getPatient());
+                        ((Patient)patient.getPatient().getPatient()).setStatusPatient(StatusPatientEnum.PRIORITY_GENERAL);
+                        checkOut.remove(patient.getPatient());
+                        out= patient.getPatient().getNamePatient() + " has returned to the waiting room";
+                    }
+                }else{
+                    out=patient.getPatient().getNamePatient() + "automatic attention can not be undone";
                 }
 
 
             }catch (Exception e) {
-                System.out.println("This check in cannot be undone");
+                System.out.println("automatic attention can not be undone");
             }
         }
         return out;
@@ -266,13 +347,13 @@ public class Controller {
 
         for(int i =0; i < priorityGeneral.getHeapSize();i++){
             try {
-                tempGeneral.HeapInsert(priorityGeneral.getArray().get(i));
+                tempGeneral.Insert(priorityGeneral.getArray().get(i));
             }catch (Exception e){}
         }
 
         for(int i =0; i < priorityHematology.getHeapSize();i++){
             try {
-                tempHematology.HeapInsert(priorityHematology.getArray().get(i));
+                tempHematology.Insert(priorityHematology.getArray().get(i));
             }catch (Exception e){}
         }
 
@@ -283,35 +364,61 @@ public class Controller {
         int general= priorityGeneral.getHeapSize();
         int hematology= priorityHematology.getHeapSize();
 
-        String out="Patients in the clinic:";
+        String out="PATIENTS IN THE CLINIC";
 
-        out+="\nPatients in Hematology: ";
+        out+="\n Patients in Hematology: (" + hematology +")";
 
         for(int i=0; i<hematology; i++){
             try {
-                out += "\n("+ (i+1)+") "+tempHematology.HeapExtractMax().getNamePatient();
+                out += "\n  ("+ (i+1)+") "+tempHematology.ExtractMax().getNamePatient();
             }catch (Exception e){ }
         }
 
-        out+="\nPatients in General attention: ";
+        out+="\n Patients in General attention: (" + general +")" ;
 
         for(int i=0; i<general; i++){
             try {
-                out += "\n(" + (i + 1) + ")" + tempGeneral.HeapExtractMax().getNamePatient();
+                out += "\n  (" + (i + 1) + ")" + tempGeneral.ExtractMax().getNamePatient();
             }catch (Exception e){ }
         }
 
-        out+="\nPatients available for check out: ";
+        out+="\n Patients available for check out: (" + checkOut.size() +")";
 
         for(PatientNode p: checkOut){
 
-            out+="\n"+ ((Patient)p.getPatient()).getName();
+            out+="\n  "+ ((Patient)p.getPatient()).getName();
         }
 
         tempGeneral= priorityGeneral;
         tempHematology= priorityHematology;
 
         return out;
+    }
+
+    public void manualAttention(int unit){
+
+        PatientNode patient =null;
+
+        try {
+            if (unit == 1) {
+
+                patient=priorityHematology.ExtractMax();
+                ((Patient) patient.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
+                checkOut.add(patient);
+                addToStack(new PatientStackNode(patient,unit));
+
+
+            } else {
+                patient=priorityGeneral.ExtractMax();
+                ((Patient) patient.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
+                checkOut.add(patient);
+                addToStack(new PatientStackNode(patient,unit));
+
+            }
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
 }

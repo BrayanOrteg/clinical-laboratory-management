@@ -1,10 +1,10 @@
 package test;
 import junit.framework.TestCase;
 import model.*;
-
 import java.util.*;
 
 public class HashTest extends TestCase {
+
 
     private Calendar date = Calendar.getInstance();
     private HashTable<Patient>table;
@@ -87,4 +87,8 @@ public class HashTest extends TestCase {
             System.out.println(e.getMessage());
         }
     }
+
+
 }
+
+

@@ -4,7 +4,7 @@ import java.lang.*;
 
 import java.util.*;
 
-public class Heap implements HeapSorting, Cloneable{
+public class Heap implements IPriorityQueue{
 
 
     private ArrayList<PatientNode> array;
@@ -23,7 +23,6 @@ public class Heap implements HeapSorting, Cloneable{
 
     }
 
-    @Override
     public void BuildHeap(){
 
         for (int i = array.size() / 2 - 1; i >= 0; i--){
@@ -31,7 +30,7 @@ public class Heap implements HeapSorting, Cloneable{
         }
 
     }
-    @Override
+
     public void Heapify(int i) {
 
         int largest = i;
@@ -60,9 +59,10 @@ public class Heap implements HeapSorting, Cloneable{
     }
 
 
+
     //Revisar
     @Override
-    public boolean HeapInsert(PatientNode toAdd)throws Exception {
+    public boolean Insert(PatientNode toAdd)throws Exception {
         if(toAdd == null) throw new Exception("No se puede insertar un null");
 
         if(toAdd.getKey()==0 || toAdd.getPatient()==null || toAdd.getPriority()==0)throw new Exception("No se puede insertar un nodo con id=0 o una prioridad=0");
@@ -80,9 +80,9 @@ public class Heap implements HeapSorting, Cloneable{
     }
 
     @Override
-    public PatientNode HeapExtractMax() throws Exception{
+    public PatientNode ExtractMax() throws Exception{
 
-        if(array.isEmpty()) throw new Exception("No hay pacientes en la fila");
+        if(array.isEmpty()) throw new Exception("There are no patients in de unit");
         PatientNode swap;
         swap = array.get(0);
         array.set(0, array.get(array.size()-1));
@@ -92,15 +92,14 @@ public class Heap implements HeapSorting, Cloneable{
         return swap;
     }
 
-    //@Override
+
     public boolean IsEmpty() {
         return array.isEmpty();
     }
 
 
 
-    @Override
-    public int SearchObject(int priority, int id, int position) throws Exception{
+    public int SearchObject(int priority, long id, int position) throws Exception{
 
         if(array.isEmpty()) throw new Exception("El paciente no ha sido encontrado");
 
@@ -118,7 +117,7 @@ public class Heap implements HeapSorting, Cloneable{
 
     }
 
-    public void DeleteExact(int priority, int id, int position){
+    public void DeleteExact(int priority, long id, int position){
         try{
             int i = SearchObject(priority, id, position);
             array.remove(i);
@@ -131,7 +130,7 @@ public class Heap implements HeapSorting, Cloneable{
 
 
     @Override
-    public boolean IncreaseKey(int oldPriority, int id, int newPriority) throws Exception{
+    public boolean IncreaseKey(int oldPriority, long id, int newPriority) throws Exception{
 
         try {
             SearchObject(oldPriority,id,0);
@@ -161,47 +160,13 @@ public class Heap implements HeapSorting, Cloneable{
         return super.clone();
     }
 
-    /*
-    @Override
-    public String toString(){
-
-        ArrayList<PatientNode> patiensClone = (ArrayList<PatientNode>) array.clone();
-        Arrays.sort(patiensClone);
-
-    }
-
-     */
 
     public ArrayList<PatientNode> getArray() {
         return array;
     }
 
-    public String HeapifyString(int i) {
 
-        int largest = i;
-
-        int l = largest * 2 + 1;
-
-        int r = largest * 2 + 2;
-
-        PatientNode swap;
-
-        if (l < array.size() && (array.get(l).getPriority()) > (array.get(largest).getPriority())) {
-            largest = l;
-        }
-        // If right child is larger than largest so far
-        if (r < array.size() && (array.get(r).getPriority()) > (array.get(largest).getPriority())){
-            largest = r;
-        }
-        // If largest is not root
-        if (largest != i) {
-            swap = array.get(i);
-            array.set(i, array.get(largest));
-            array.set(largest, swap);
-            Heapify(largest);
-        }
-
-        return ((Patient)(array.get(largest).getPatient())).getName() + "pija";
-
+    public PatientNode getByIndex(int id){
+        return array.get(id);
     }
 }

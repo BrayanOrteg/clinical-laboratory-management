@@ -34,8 +34,8 @@ public class HeapTest extends TestCase {
         PatientNode patientNode2 = new PatientNode<Patient>(1, patient2, 112453023);
 
         try {
-            heapPatients.HeapInsert(patientNode1);
-            heapPatients.HeapInsert(patientNode2);
+            heapPatients.Insert(patientNode1);
+            heapPatients.Insert(patientNode2);
         }catch (Exception e){
             System.out.println(e.getMessage());
 
@@ -60,8 +60,8 @@ public class HeapTest extends TestCase {
         PatientNode patientTestNode2 = new PatientNode(3, patientTest2, 202453025);
 
         try {
-            heapPatients.HeapInsert(patientTestNode1);
-            heapPatients.HeapInsert(patientTestNode2);
+            heapPatients.Insert(patientTestNode1);
+            heapPatients.Insert(patientTestNode2);
         }catch (Exception e){
             System.out.println(e.getMessage());
 
@@ -83,7 +83,7 @@ public class HeapTest extends TestCase {
         PatientNode pa= null;
 
         try {
-            heapPatients.HeapInsert(pa);
+            heapPatients.Insert(pa);
         }catch (Exception e){
             System.out.println(e.getMessage());
 
@@ -104,7 +104,7 @@ public class HeapTest extends TestCase {
         PatientNode patientTestNode = new PatientNode(0, patientTest2, 202453025);
 
         try {
-            heapPatients.HeapInsert(patientTestNode);
+            heapPatients.Insert(patientTestNode);
         }catch (Exception e){
             System.out.println(e.getMessage());
 
@@ -134,7 +134,7 @@ public class HeapTest extends TestCase {
         setupStage2();
 
         try {
-            heapPatients.HeapExtractMax();
+            heapPatients.ExtractMax();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -149,7 +149,7 @@ public class HeapTest extends TestCase {
         setupStage1();
 
         try {
-            heapPatients.HeapExtractMax();
+            heapPatients.ExtractMax();
             assertEquals(heapPatients.getHeapSize(),1);
         }catch (Exception e){
             System.out.println(e.getMessage());

@@ -8,12 +8,12 @@ public class Patient implements Comparable<Patient>{
    private Calendar BDate;
    private Integer priority;
    private AggravationEnum aggravation;
-   private  Integer id;
+   private  long id;
    private  String causeOfAdmission;
 
    private  StatusPatientEnum statusPatient;
 
-   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, AggravationEnum aggravation, StatusPatientEnum statusPatient, Integer id) {
+   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, AggravationEnum aggravation, StatusPatientEnum statusPatient, long id) {
       this.name = name;
       this.BDate = BDate;
       this.priority = priority;
@@ -35,11 +35,11 @@ public class Patient implements Comparable<Patient>{
       this.priority = priority;
    }
 
-   public Integer getId() {
+   public long getId() {
       return id;
    }
 
-   public void setId(Integer id) {
+   public void setId(long id) {
       this.id = id;
    }
 
