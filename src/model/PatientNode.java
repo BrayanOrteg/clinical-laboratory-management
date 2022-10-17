@@ -1,7 +1,7 @@
 package model;
 
 public class PatientNode <T>{
-    private int priority, key;
+    private int priority, key, unit;
     private T patient;
     private PatientNode nextPatient;
     private PatientNode previousPatient;
@@ -10,6 +10,7 @@ public class PatientNode <T>{
         this.priority = priority;
         this.patient = patient;
         this.key=key;
+        this.unit=unit;
         nextPatient=null;
         previousPatient=null;
     }
@@ -41,4 +42,9 @@ public class PatientNode <T>{
     public int getKey() { return key; }
 
     public void setKey(int key) { this.key = key; }
+
+
+    public String getNamePatient(){
+       return ((Patient)patient).getName();
+    }
 }

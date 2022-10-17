@@ -4,7 +4,7 @@ public interface IHashTable<T> {
 
     public void chainedHashInsert(PatientNode node);
 
-    public PatientNode chainedHashSearch(int key) throws Exception;
+    public PatientNode chainedHashSearch(int key);
 
     public PatientNode chainedHashDelete(int key);
 

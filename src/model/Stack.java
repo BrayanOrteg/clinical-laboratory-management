@@ -20,9 +20,7 @@ public class Stack <T> implements  IStack <T>{
         return array.remove(array.size()-1);
     }
 
-    public void push(T newElement) throws Exception{
-
-        if(((Patient)newElement).getPriority()<0){ throw new Exception("The priority is negative");}
+    public void push(T newElement){
 
         array.add(newElement);
     }
