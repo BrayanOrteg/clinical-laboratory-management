@@ -13,14 +13,13 @@ public class Controller {
 
     ArrayList <PatientNode> checkOut= new ArrayList<>();
 
-    ArrayList <Patient> allPatients;
+    public ArrayList <Patient> allPatients;
 
     Stack <PatientStackNode> undoStack= new Stack<>();
     HashTable <PatientNode> hash = new HashTable<>();
 
     public Controller(){
         allPatients = ReadJson();
-
         if(allPatients!=null){
             for(Patient p:allPatients){
                 try{
@@ -32,6 +31,7 @@ public class Controller {
         }else{
             allPatients = new ArrayList<>();
         }
+        System.out.println(allPatients.size());
     }
 
     //TimedOut
@@ -99,12 +99,14 @@ public class Controller {
                 json= line;
             }
             fis.close();
-
+            System.out.println(json);
             Gson gson = new Gson();
             Patient[] patienstFromJson = gson.fromJson(json, Patient[].class);
             ArrayList<Patient> sent = new ArrayList<>();
 
-            sent.addAll(sent);
+            if(patienstFromJson!=null){
+                sent.addAll(List.of(patienstFromJson));
+            }
 
             return sent;
 

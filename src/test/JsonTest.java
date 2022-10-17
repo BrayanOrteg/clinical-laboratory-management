@@ -1,4 +1,4 @@
-/*
+
 package test;
 import junit.framework.TestCase;
 import model.*;
@@ -12,7 +12,7 @@ import java.util.Calendar;
 public class JsonTest extends TestCase {
 
     private Controller example = new Controller();
-    private Patient[] save = new Patient[4];
+    private ArrayList<Patient> save = new ArrayList<>();
     private Calendar date= Calendar.getInstance();
 
 
@@ -34,11 +34,11 @@ public class JsonTest extends TestCase {
         date.set(2009, 11, 21);
         Patient patient4 = new Patient("C",date,"Enanismo",2, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,2);
 
-        save[0]=(patient1);
-        save[1]=(patient2);
-        save[2]=(patient3);
-        save[3]=(patient4);
-
+        save.add(patient1);
+        save.add(patient2);
+        save.add(patient3);
+        save.add(patient4);
+        example.allPatients = save;
     }
 
     public void testSaveData(){
@@ -58,5 +58,3 @@ public class JsonTest extends TestCase {
 
     
 }
-
- */
