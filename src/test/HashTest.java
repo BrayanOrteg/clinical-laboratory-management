@@ -21,7 +21,7 @@ public class HashTest extends TestCase {
 
         table = new HashTable<>();
         date.set(1995, 5, 25);
-        patient=new Patient("A", date, "HOLA",1, StateEnum.GRAVE, AggravationEnum.PREGNANT, StatusPatientEnum.PRIORITY,1);
+        patient=new Patient("A", date, "HOLA",1, AggravationEnum.PREGNANT, StatusPatientEnum.PRIORITY_GENERAL,1);
         patientNode=new PatientNode<>(1,patient,1);
         table.chainedHashInsert(patientNode);
     }
@@ -29,7 +29,7 @@ public class HashTest extends TestCase {
 
         setupStage2();
 
-        patient=new Patient("B", date, "Bye",1, StateEnum.MILD, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT,1);
+        patient=new Patient("B", date, "Bye",1, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT,1);
         patientNode2=new PatientNode<>(5,patient,2);
         table.chainedHashInsert(patientNode2);
     }
@@ -37,7 +37,7 @@ public class HashTest extends TestCase {
 
         setupStage2();
 
-        patient=new Patient("B", date, "Bye",1, StateEnum.MILD, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT, 1);
+        patient=new Patient("B", date, "Bye",1,  AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT, 1);
         patientNode2=new PatientNode<>(5,patient,1);
         table.chainedHashInsert(patientNode2);
     }

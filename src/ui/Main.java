@@ -10,9 +10,13 @@ public class Main {
 
     public Controller control = new Controller();
 
-    public static Timer timer = new Timer();
+    public static Timer timerGeneral = new Timer();
 
-    public static TimerTask task;
+    public static Timer timerHematology = new Timer();
+
+    public static TimerTask taskGeneral;
+
+    public static TimerTask taskHematology;
 
     public Main(){
     }
@@ -21,12 +25,26 @@ public class Main {
 
         Main principal= new Main();
 
-        task = new TimerTask() {
+        taskGeneral = new TimerTask() {
             @Override
             public void run() {
-                String out = principal.timedOut();
+                System.out.println("La task General");
+                String out = principal.timedOutGeneral();
                 if(!out.equals("")) {
-                    System.out.println("La fila ha avanzado, el paciente con " + out + " ha sido atendido" +
+                    System.out.println("La fila GENERAL ha avanzado, el paciente con " + out + " ha sido atendido" +
+                            "\nNo olvide hacer el checkout manualmente");
+
+                }
+            }
+        };
+
+        taskHematology = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("La task Hematologica");
+                String out = principal.timedOutHematology();
+                if(!out.equals("")) {
+                    System.out.println("La fila HEMATOLOGICA ha avanzado, el paciente con " + out + " ha sido atendido" +
                             "\nNo olvide hacer el checkout manualmente");
 
                 }
@@ -38,19 +56,27 @@ public class Main {
 
         do{
             option= principal.showMenu();
+
             principal.executeOperation(option);
 
             if(firstTime){
-                timer.schedule(task, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000));
+                System.out.println("Timer iniciados");
+                timerGeneral.schedule(taskGeneral, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000));
+                timerHematology.schedule(taskHematology, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000));
                 firstTime=false;
             }
 
         }while (option!=0);
-        timer.cancel();
+        timerGeneral.cancel();
+        timerHematology.cancel();
     }
 
-    public String timedOut(){
-        return control.timedOut();
+    public String timedOutGeneral(){
+        return control.timedOutGeneral();
+    }
+
+    public String timedOutHematology(){
+        return control.timedOutHematology();
     }
 
 
@@ -64,6 +90,7 @@ public class Main {
                         (1) Patient check in
                         (2) Patient check out
                         (3) Undo last action
+                        (4) Print patients
                         (0) Exit
                 """);
 
@@ -79,11 +106,33 @@ public class Main {
 
         switch(operation) {
             case 0:
+                control.WriteJson();
                 System.out.println("Bye!");
                 break;
 
             case 1:
-                patientCheckIn();
+
+                System.out.println("Insert the id of the patient");
+                int id= sc.nextInt();
+
+                int search =  searchPatient(id);
+
+                if(search==2){
+                    System.out.println("this patient is already in the laboratory");
+
+                }else{
+                    System.out.println("Which unit will the patient be admitted to?\n(1)Hematology\n(2)General purpose");
+                    int unit = sc.nextInt();
+                    sc.nextLine();
+                    if(search == 3){
+
+                        control.checkInPrePatient(id,unit);
+
+                    }else{
+                        patientCheckIn(id,unit);
+                    }
+                }
+
                 break;
                 
             case 2:
@@ -94,26 +143,35 @@ public class Main {
                 undoConfirmation();
                 break;
 
+            case 4:
+                System.out.println(control.printPatients());
+                break;
+
             default:
                 System.out.println("Invalid option");
         }
     }
 
-    public void patientCheckIn(){
+
+    public int searchPatient(int id){
+
+        int result = control.patientStatusCheck(id);
+
+        return result;
+    }
+
+    public void patientCheckIn(int id, int unit){
 
         String name;
-        int id;
         String birth;
         String admissionReason;
-        int state, aggravation;
+        int aggravation;
         int [] arrayDate = new int[3];
         Calendar date= Calendar.getInstance();
 
+
         System.out.println("*PATIENT CHECK IN* \nType patient's name");
         name= sc.nextLine();
-
-        System.out.println("\nType patient's id");
-        id= Integer.parseInt(sc.nextLine());
 
         System.out.println("\nType patient's date of birth in format (year/month/day)\nExample (1990/11/10)");
         birth=sc.nextLine();
@@ -123,16 +181,6 @@ public class Main {
 
         System.out.println("\nType the admission Reason");
         admissionReason= sc.nextLine();
-
-        System.out.println(
-                """
-                        Type patient´s condition
-        
-                        (1) Mild
-                        (2) Intermediate
-                        (3) Serious
-                """);
-        state= sc.nextInt();
 
         System.out.println(
                 """
@@ -146,14 +194,16 @@ public class Main {
                 """);
         aggravation= sc.nextInt();
 
-        control.checkInPatient(name,date, admissionReason,state,aggravation,id);
+        control.checkInPatient(name,date, admissionReason,aggravation,id , unit);
 
     }
+
+
 
     public void patientCheckOut(){
 
        System.out.println("Insert patient's id");
-       control.checkOutPatient(sc.nextInt());
+       System.out.println(control.checkOutPatient(sc.nextInt()));
     }
 
     public void undoConfirmation(){

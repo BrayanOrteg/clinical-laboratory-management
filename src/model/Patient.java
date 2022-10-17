@@ -7,18 +7,16 @@ public class Patient implements Comparable<Patient>{
    private String name;
    private Calendar BDate;
    private Integer priority;
-   private StateEnum state;
    private AggravationEnum aggravation;
    private  Integer id;
    private  String causeOfAdmission;
 
    private  StatusPatientEnum statusPatient;
 
-   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, StateEnum state, AggravationEnum aggravation, StatusPatientEnum statusPatient, Integer id) {
+   public Patient(String name, Calendar BDate,String causeOfAdmission , Integer priority, AggravationEnum aggravation, StatusPatientEnum statusPatient, Integer id) {
       this.name = name;
       this.BDate = BDate;
       this.priority = priority;
-      this.state = state;
       this.aggravation = aggravation;
       this.causeOfAdmission=causeOfAdmission;
       this.statusPatient=statusPatient;

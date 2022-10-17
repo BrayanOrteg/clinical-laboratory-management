@@ -33,14 +33,14 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
     }
 
 
-    public PatientNode chainedHashSearch(int key) throws Exception {
+    public PatientNode chainedHashSearch(int key) {
 
         int code = hashFunction(key);
         boolean var = false;
         PatientNode pointer=array[code];
 
         if(pointer==null){
-            throw new Exception("The patient is not registered or has not been attended");
+            return null;
         }
 
         while (var == false) {
@@ -62,12 +62,8 @@ public class HashTable<T> implements IHashTable<PatientNode<T>> {
 
         boolean var = false;
         PatientNode pointer=null;
+        pointer = chainedHashSearch(key);
 
-        try {
-            pointer = chainedHashSearch(key);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
         if(pointer!=null) {
 

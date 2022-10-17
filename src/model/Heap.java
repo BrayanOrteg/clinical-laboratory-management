@@ -4,7 +4,7 @@ import java.lang.*;
 
 import java.util.*;
 
-public class Heap implements HeapSorting {
+public class Heap implements HeapSorting, Cloneable{
 
 
     private ArrayList<PatientNode> array;
@@ -56,8 +56,6 @@ public class Heap implements HeapSorting {
             array.set(largest, swap);
             Heapify(largest);
         }
-
-
 
     }
 
@@ -154,8 +152,56 @@ public class Heap implements HeapSorting {
     }
 
 
-
     public int getHeapSize(){
         return array.size();
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    /*
+    @Override
+    public String toString(){
+
+        ArrayList<PatientNode> patiensClone = (ArrayList<PatientNode>) array.clone();
+        Arrays.sort(patiensClone);
+
+    }
+
+     */
+
+    public ArrayList<PatientNode> getArray() {
+        return array;
+    }
+
+    public String HeapifyString(int i) {
+
+        int largest = i;
+
+        int l = largest * 2 + 1;
+
+        int r = largest * 2 + 2;
+
+        PatientNode swap;
+
+        if (l < array.size() && (array.get(l).getPriority()) > (array.get(largest).getPriority())) {
+            largest = l;
+        }
+        // If right child is larger than largest so far
+        if (r < array.size() && (array.get(r).getPriority()) > (array.get(largest).getPriority())){
+            largest = r;
+        }
+        // If largest is not root
+        if (largest != i) {
+            swap = array.get(i);
+            array.set(i, array.get(largest));
+            array.set(largest, swap);
+            Heapify(largest);
+        }
+
+        return ((Patient)(array.get(largest).getPatient())).getName() + "pija";
+
     }
 }

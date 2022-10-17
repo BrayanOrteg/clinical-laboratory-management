@@ -19,7 +19,7 @@ public class StackTest extends TestCase {
         date.set(1995, 5, 25);
 
         try {
-            stack.push(new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.CHILD,StatusPatientEnum.TO_CHECKOUT,1));
+            stack.push(new Patient("A",date,"HOLA",1,AggravationEnum.CHILD,StatusPatientEnum.TO_CHECKOUT,1));
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -31,8 +31,8 @@ public class StackTest extends TestCase {
         date.set(1995, 5, 25);
 
         try {
-            stack.push(new Patient("A",date,"HOLA",1, StateEnum.GRAVE, AggravationEnum.CHILD,StatusPatientEnum.TO_CHECKOUT,1));
-            stack.push(new Patient("B",date,"HOLA",2, StateEnum.INTERMEDIATE, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,2));
+            stack.push(new Patient("A",date,"HOLA",1,  AggravationEnum.CHILD,StatusPatientEnum.TO_CHECKOUT,1));
+            stack.push(new Patient("B",date,"HOLA",2, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,2));
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -49,7 +49,7 @@ public class StackTest extends TestCase {
     public void testPush_Empty_False (){
         setupStage1();
         try {
-            stack.push(new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.OLD_AGE,StatusPatientEnum.TO_CHECKOUT,1));
+            stack.push(new Patient("A",date,"HOLA",1, AggravationEnum.OLD_AGE,StatusPatientEnum.TO_CHECKOUT,1));
         }
         catch (Exception e){
             System.out.println(e.getMessage());
@@ -62,7 +62,7 @@ public class StackTest extends TestCase {
         setupStage2();
 
         try{
-            stack.push(new Patient("A",date,"HOLA",1, StateEnum.GRAVE, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,1));
+            stack.push(new Patient("A",date,"HOLA",1, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,1));
 
         }
         catch (Exception e){
@@ -75,7 +75,7 @@ public class StackTest extends TestCase {
     public void testPushError(){
         setupStage1();
         try{
-            stack.push(new Patient("A",date,"HOLA",-1, StateEnum.INTERMEDIATE, AggravationEnum.PREGNANT,StatusPatientEnum.PRIORITY,1));
+            stack.push(new Patient("A",date,"HOLA",-1, AggravationEnum.PREGNANT,StatusPatientEnum.PRIORITY_HEMATOLOGY,1));
 
         }
         catch (Exception e){
@@ -123,7 +123,7 @@ public class StackTest extends TestCase {
     //Test peak
     public void testPeak_Push (){
         setupStage3();
-        Patient patientTest= new Patient("A",date,"HOLA",1, StateEnum.MILD, AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,1);
+        Patient patientTest= new Patient("A",date,"HOLA",1,  AggravationEnum.NONE,StatusPatientEnum.TO_CHECKOUT,1);
         try{
             stack.push(patientTest);
         }catch (Exception e){

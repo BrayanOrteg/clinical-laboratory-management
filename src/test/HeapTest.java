@@ -24,12 +24,12 @@ public class HeapTest extends TestCase {
         heapPatients= new Heap();
 
         date.set(1999, 5, 20);
-        Patient patient1= new Patient("Paolo", date,"HOLA",2, StateEnum.INTERMEDIATE, AggravationEnum.OLD_AGE, StatusPatientEnum.PRIORITY,11000204);
+        Patient patient1= new Patient("Paolo", date,"HOLA",2, AggravationEnum.OLD_AGE, StatusPatientEnum.PRIORITY_HEMATOLOGY,11000204);
 
         PatientNode patientNode1 = new PatientNode<Patient>(2, patient1, 11000204);
 
         date.set(2001, 3, 21);
-        Patient patient2= new Patient("Juana", date, "HOLA",1, StateEnum.MILD, AggravationEnum.PREGNANT, StatusPatientEnum.TO_CHECKOUT,112453023);
+        Patient patient2= new Patient("Juana", date, "HOLA",1, AggravationEnum.PREGNANT, StatusPatientEnum.TO_CHECKOUT,112453023);
 
         PatientNode patientNode2 = new PatientNode<Patient>(1, patient2, 112453023);
 
@@ -53,10 +53,10 @@ public class HeapTest extends TestCase {
         //al buscarlo debería estar en la posición cero del ArrayList
 
         date.set(2002, 7, 23);
-        Patient patientTest1 = new Patient("Roberta", date, "HOLA",2, StateEnum.INTERMEDIATE, AggravationEnum.CHILD, StatusPatientEnum.TO_CHECKOUT,112453023);
+        Patient patientTest1 = new Patient("Roberta", date, "HOLA",2, AggravationEnum.CHILD, StatusPatientEnum.TO_CHECKOUT,112453023);
         PatientNode patientTestNode1 = new PatientNode(2, patientTest1, 112453023);
         date.set(2004, 7, 23);
-        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, StateEnum.GRAVE, AggravationEnum.NONE, StatusPatientEnum.PRIORITY,202453025);
+        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, AggravationEnum.NONE, StatusPatientEnum.PRIORITY_HEMATOLOGY,202453025);
         PatientNode patientTestNode2 = new PatientNode(3, patientTest2, 202453025);
 
         try {
@@ -100,7 +100,7 @@ public class HeapTest extends TestCase {
         setupStage1();
 
         date.set(2004, 7, 23);
-        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, StateEnum.GRAVE, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT, 202453025);
+        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT, 202453025);
         PatientNode patientTestNode = new PatientNode(0, patientTest2, 202453025);
 
         try {
@@ -199,7 +199,7 @@ public class HeapTest extends TestCase {
     public void testMaximunException(){
         setupStage1();
 
-        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, StateEnum.GRAVE, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT,202453025);
+        Patient patientTest2= new Patient("Constanza", date, "HOLA",3, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT,202453025);
         PatientNode patientTestNode2 = new PatientNode(3, patientTest2, 202453025);
 
 
