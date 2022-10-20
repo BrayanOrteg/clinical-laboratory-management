@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class Controller {
 
@@ -323,7 +324,7 @@ public class Controller {
                         out= patient.getPatient().getNamePatient() + " has returned to the waiting room";
                     }
                 }else{
-                    out=patient.getPatient().getNamePatient() + "automatic attention can not be undone";
+                    out=patient.getPatient().getNamePatient() + "'automatic attention can not be undone";
                 }
 
 
@@ -406,14 +407,16 @@ public class Controller {
                 ((Patient) patient.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
                 checkOut.add(patient);
                 addToStack(new PatientStackNode(patient,unit));
-
+                System.out.println("The HEMATOLOGY row has move, the patient with " + ((Patient) patient.getPatient()).getName()+ " and id: "+((Patient) patient.getPatient()).getId() + " has been attended" +
+                        "\nDon't forget to do the manual checkout");
 
             } else {
                 patient=priorityGeneral.ExtractMax();
                 ((Patient) patient.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT);
                 checkOut.add(patient);
                 addToStack(new PatientStackNode(patient,unit));
-
+                System.out.println("The GENERAL row has move, the patient with " + ((Patient) patient.getPatient()).getName()+ " and id: "+((Patient) patient.getPatient()).getId() + " has been attended" +
+                        "\nDon't forget to do the manual checkout");
             }
         }catch (Exception e) {
             System.out.println(e.getMessage());

@@ -14,8 +14,9 @@ public class Main {
 
     public static Runnable taskGeneral, taskHematology;
 
+    public static ScheduledExecutorService tasker = new ScheduledThreadPoolExecutor(1);
 
-    public static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+    public static ScheduledFuture executor;
 
     public Main(){}
 
@@ -36,8 +37,8 @@ public class Main {
             public void run() {
                 String out = principal.timedOutGeneral();
                 if(!out.equals("")) {
-                    System.out.println("La fila GENERAL ha avanzado, el paciente con " + out + " ha sido atendido" +
-                            "\nNo olvide hacer el checkout manualmente");
+                    System.out.println("The GENERAL row has move, the patient with " + out + " has been attended" +
+                            "\nDon't forget to do the manual checkout");
                     principal.increaseGeneral();
                 }
             }
@@ -48,8 +49,8 @@ public class Main {
             public void run() {
                 String out = principal.timedOutHematology();
                 if(!out.equals("")) {
-                    System.out.println("La fila HEMATOLOGICA ha avanzado, el paciente con " + out + " ha sido atendido" +
-                            "\nNo olvide hacer el checkout manualmente");
+                    System.out.println("The HEMATOLOGIC row has move, the patient with " + out + " has been attended" +
+                            "\nDon't forget to do the manual checkout");
                     principal.increaseHematology();
                 }
             }
@@ -57,24 +58,29 @@ public class Main {
 
 
 
-        boolean firstTime = true;
+        boolean paused = true;
         int option=0;
 
         do{
             option= principal.showMenu();
 
-            principal.executeOperation(option);
-
-            if(firstTime){
-                System.out.println("Timer Iniciado");
-                executor.scheduleAtFixedRate(taskGeneral, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000), TimeUnit.MILLISECONDS);
-                firstTime = false;
+            if(!paused){
+                System.out.println("Timer Reiniciado por atencion manual");
+                executor.cancel(true);
+                paused = true;
             }
 
+            principal.executeOperation(option);
+
+            if(paused){
+                System.out.println("Timer Iniciado");
+                executor=tasker.scheduleAtFixedRate(taskGeneral, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000), TimeUnit.MILLISECONDS);
+                paused = false;
+            }
 
         }while (option!=0);
 
-        executor.shutdown();
+        executor.cancel(true);
     }
 
     public void increaseGeneral(){
@@ -186,18 +192,21 @@ public class Main {
         }else{
             System.out.println("Which unit will the patient be admitted to?\n(1)Hematology\n(2)General purpose");
 
+
             //Try catch if the unit is not a number
-            try{
-                unit = sc.nextInt();
-            }catch (InputMismatchException e){
-                sc.nextLine();
-                throw new Exception("Please type an integer");
-            }
+            do {
+                try {
+                    unit = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    sc.nextLine();
+                    throw new Exception("Please type an integer");
+                }
+
+                if((unit<1 || unit>2)) System.out.println("Invalid option, insert a number between 1 and 2");
+
+            }while (unit<1 ||unit>2);
             sc.nextLine();
 
-            if (unit<1){
-                unit=1;
-            }else{unit=2;}
 
             if(search == 3){
                 int aggravation;
@@ -230,6 +239,9 @@ public class Main {
 
 
                 sc.nextLine();
+                System.out.println("\nType the admission Reason");
+                String admissionReason= sc.nextLine();
+
                 control.checkInPrePatient(id,unit,aggravation);
             }else{
 
@@ -327,16 +339,19 @@ public class Main {
     public void nextTurn() throws Exception{
         int unit;
         System.out.println("Type unit's number\n(1)Hematology\n(2)General purpose");
-        try {
-            unit=Integer.parseInt(sc.nextLine());
-        }catch (InputMismatchException e){
-            sc.nextLine();
-            throw new Exception("Please type an integer");
-        }
 
+        do {
+            try {
+                unit = Integer.parseInt(sc.nextLine());
+            } catch (InputMismatchException e) {
+                sc.nextLine();
+                throw new Exception("Please type an integer");
+            }
 
-        if(unit <=1)unit=1;
-        else unit=2;
+            if((unit<1 || unit>2)) System.out.println("Invalid option, insert a number between 1 and 2");
+
+        }while (unit<1 || unit>2);
+
 
         control.manualAttention(unit);
     }

@@ -101,9 +101,9 @@ public class Heap implements IPriorityQueue{
 
     public int SearchObject(int priority, long id, int position) throws Exception{
 
-        if(array.isEmpty()) throw new Exception("El paciente no ha sido encontrado");
+        if(array.isEmpty()) throw new Exception("The patient was not found");
 
-        if(array.get(position)==null) throw new Exception("El paciente no ha sido encontrado");
+        if(array.get(position)==null) throw new Exception("The patient was not found");
 
         int l = position*2+1;
 
@@ -142,7 +142,7 @@ public class Heap implements IPriorityQueue{
 
         int position = SearchObject(oldPriority, id, 0);
 
-        if(position == array.size()) throw new Exception("El paciente no ha sido encontrado");
+        if(position == array.size()) throw new Exception("The patient was not found");
 
         array.get(position).setPriority(newPriority);
         BuildHeap();
