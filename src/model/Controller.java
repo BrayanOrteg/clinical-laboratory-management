@@ -88,6 +88,7 @@ public class Controller {
                 PatientNode pn1 = priorityGeneral.ExtractMax();
                 checkOut.add(pn1);
                 ((Patient)pn1.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT_MACHINE);
+                addToStack(new PatientStackNode(pn1,2));
 
                 return "Name: " + ((Patient) pn1.getPatient()).getName() + " id: " + ((Patient) pn1.getPatient()).getId();
             } catch (Exception e) {}
@@ -102,6 +103,7 @@ public class Controller {
                 PatientNode pn2 = priorityHematology.ExtractMax();
                 checkOut.add(pn2);
                 ((Patient)pn2.getPatient()).setStatusPatient(StatusPatientEnum.TO_CHECKOUT_MACHINE);
+                addToStack(new PatientStackNode(pn2,1));
 
                 return "Name: " + ((Patient) pn2.getPatient()).getName() + " id: " + ((Patient) pn2.getPatient()).getId();
             } catch (Exception e) {}
@@ -325,6 +327,11 @@ public class Controller {
                     }
                 }else{
                     out=patient.getPatient().getNamePatient() + "'automatic attention can not be undone";
+                    if(patient.getUnit()==1){
+                        DecreaseHematology();
+                    } else if (patient.getUnit()==2) {
+                        DecreaseGeneral();
+                    }
                 }
 
 
@@ -371,7 +378,8 @@ public class Controller {
 
         for(int i=0; i<hematology; i++){
             try {
-                out += "\n  ("+ (i+1)+") "+tempHematology.ExtractMax().getNamePatient();
+                PatientNode aux=tempHematology.ExtractMax();
+                out += "\n  ("+ (i+1)+") "+aux.getNamePatient() + " with id: " +((Patient)aux.getPatient()).getId() ;
             }catch (Exception e){ }
         }
 
@@ -379,7 +387,8 @@ public class Controller {
 
         for(int i=0; i<general; i++){
             try {
-                out += "\n  (" + (i + 1) + ")" + tempGeneral.ExtractMax().getNamePatient();
+                PatientNode aux=tempHematology.ExtractMax();
+                out += "\n  (" + (i + 1) + ")" +aux.getNamePatient() + " with id: " +((Patient)aux.getPatient()).getId() ;
             }catch (Exception e){ }
         }
 
@@ -387,7 +396,7 @@ public class Controller {
 
         for(PatientNode p: checkOut){
 
-            out+="\n  "+ ((Patient)p.getPatient()).getName();
+            out+="\n  "+ ((Patient)p.getPatient()).getName() + " with id: " + ((Patient)p.getPatient()).getId();
         }
 
         tempGeneral= priorityGeneral;

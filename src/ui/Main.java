@@ -70,17 +70,22 @@ public class Main {
                 paused = true;
             }
 
+
             principal.executeOperation(option);
 
             if(paused){
                 System.out.println("Timer Iniciado");
-                executor=tasker.scheduleAtFixedRate(taskGeneral, 120000-(int)(Math.random()*60000),120000-(int)(Math.random()*60000), TimeUnit.MILLISECONDS);
+                executor=tasker.scheduleAtFixedRate(taskGeneral, 60,60, TimeUnit.SECONDS);
+                executor=tasker.scheduleAtFixedRate(taskHematology, 60,60, TimeUnit.SECONDS);
                 paused = false;
             }
 
+
         }while (option!=0);
 
-        executor.cancel(true);
+            executor.cancel(true);
+            System.exit(0);
+
     }
 
     public void increaseGeneral(){
