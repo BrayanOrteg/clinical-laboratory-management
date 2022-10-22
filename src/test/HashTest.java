@@ -42,6 +42,7 @@ public class HashTest extends TestCase {
         table.chainedHashInsert(patientNode2);
     }
 
+    //search
     public void testSearch(){
         setupStage2();
         try {
@@ -69,24 +70,37 @@ public class HashTest extends TestCase {
             System.out.println(e.getMessage());
         }
     }
-    public void testDelete(){
+
+    // delete
+    public void testDelete3(){
         setupStage2();
-        try {
-            assertEquals(table.chainedHashDelete(1), patientNode);
+
+           assertNull(table.chainedHashDelete(2));
             table.chainedHashSearch(1);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+
     }
+
     public void testDelete2(){
-        setupStage4();
-        try {
-            assertEquals(table.chainedHashDelete(1), patientNode);
-            assertEquals(table.chainedHashSearch(1), patientNode2);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+        setupStage2();
+
+        patient=new Patient("B", date, "Bye",1, AggravationEnum.NONE, StatusPatientEnum.TO_CHECKOUT,1);
+        patientNode2=new PatientNode<>(5,patient,2);
+        table.chainedHashInsert(patientNode2);
+
+        assertEquals(table.chainedHashDelete(2),patientNode2);
+        assertNull(table.chainedHashSearch(2));
     }
+
+    public void testDelete1(){
+        setupStage2();
+
+
+        table.chainedHashDelete(1);
+        assertNull(table.chainedHashSearch(1));
+    }
+
+
+
 
 
 }

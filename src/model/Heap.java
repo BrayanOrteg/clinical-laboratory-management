@@ -65,7 +65,7 @@ public class Heap implements IPriorityQueue{
     public boolean Insert(PatientNode toAdd)throws Exception {
         if(toAdd == null) throw new Exception("No se puede insertar un null");
 
-        if(toAdd.getKey()==0 || toAdd.getPatient()==null || toAdd.getPriority()==0)throw new Exception("No se puede insertar un nodo con id=0 o una prioridad=0");
+        if(toAdd.getKey()==0 || toAdd.getPatient()==null || toAdd.getPriority()==0)throw new Exception("Can't insert a Node with id=0 o or priority=0");
 
         array.add(toAdd);
         BuildHeap();
@@ -75,7 +75,7 @@ public class Heap implements IPriorityQueue{
 
     @Override
     public PatientNode Maximun() throws Exception {
-        if(array.isEmpty()) throw new Exception("No hay pacientes en la fila");
+        if(array.isEmpty()) throw new Exception("No patients in the queue");
         else return array.get(0);
     }
 

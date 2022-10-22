@@ -65,7 +65,7 @@ public class Main {
             option= principal.showMenu();
 
             if(!paused){
-                System.out.println("Timer Reiniciado por atencion manual");
+
                 executor.cancel(true);
                 paused = true;
             }
@@ -74,7 +74,7 @@ public class Main {
             principal.executeOperation(option);
 
             if(paused){
-                System.out.println("Timer Iniciado");
+
                 executor=tasker.scheduleAtFixedRate(taskGeneral, 60,60, TimeUnit.SECONDS);
                 executor=tasker.scheduleAtFixedRate(taskHematology, 60,60, TimeUnit.SECONDS);
                 paused = false;
